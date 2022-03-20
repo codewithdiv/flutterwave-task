@@ -74,13 +74,22 @@ export default class FeeService {
     requestObj: ComputedTransaction
   ): Promise<T> {
     let fee: Fees = null;
+    /** Find a FeeConfigurationSpec (FCS) by the
+     * fee_entity => payementEntity.type from the user request
+     * OR
+     * fee_entity_property => requestObj.PaymentEntity.brand
+     * OR
+     * fee_entity_property => requestObj.PaymentEntity.brand
+     */
     fee = await Fee.findOne({
       $or: [
-        { fee_entity: requestObj.PaymentEntity.Type },
-        { fee_entity_property: requestObj.PaymentEntity.Brand },
-        { fee_entity_property: requestObj.PaymentEntity.Issuer },
+        { fee_entity: requestObj.PaymentEntity.Type || ' ' },
+        { fee_entity_property: requestObj.PaymentEntity.Brand || ' ' },
+        { fee_entity_property: requestObj.PaymentEntity.Issuer || ' ' },
       ],
     });
+
+    log(fee);
 
     let appliedFeeValue!: number;
     let chargeAmount!: number;
