@@ -78,10 +78,7 @@ export default class FeeService {
 
     /** Find a FeeConfigurationSpec (FCS) by the
      * fee_entity => payementEntity.type from the user request
-     * OR
-     * fee_entity_property => requestObj.PaymentEntity.brand
-     * OR
-     * fee_entity_property => requestObj.PaymentEntity.brand
+     * fee_entity_property => check if a the requestObj.PaymentEntity.Brand is empty and the requestObj.PaymentEntity.Issuer is empty then default to '*'
      */
 
     fee = await Fee.findOne({
@@ -93,11 +90,6 @@ export default class FeeService {
         : requestObj.PaymentEntity.Issuer ||
           requestObj.PaymentEntity.Issuer ||
           '*',
-      // $or: [
-      // {},
-      // { fee_entity_property: requestObj.PaymentEntity.Brand || '*' },
-      // { fee_entity_property: requestObj.PaymentEntity.Issuer || '*' },
-      // ],
     });
 
     log(fee);
