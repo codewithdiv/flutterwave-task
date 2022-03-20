@@ -25,7 +25,6 @@ interface FeesDoc extends Document {
 }
 
 const feeSchema = new Schema({
-  id: String,
   fee_id: String,
   fee_currency: String,
   fee_locale: String,
