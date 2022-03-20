@@ -36,9 +36,19 @@ export default class FeesController {
     res: Response,
     next: NextFunction
   ) {
-    const _computeTransactionFee = await FeeService.computeTransactionFee(
-      req.body
-    );
-    return res.status(200).json({ computedFee: _computeTransactionFee });
+    switch (req.body.Currency) {
+      case 'USD':
+        res.status(400).json({
+          status: 'error',
+          Error: 'No fee configuration for USD transactions.',
+        });
+        break;
+      case 'NGN':
+        const _computeTransactionFee = await FeeService.computeTransactionFee(
+          req.body
+        );
+        res.status(200).json({ computedFee: _computeTransactionFee });
+        break;
+    }
   }
 }

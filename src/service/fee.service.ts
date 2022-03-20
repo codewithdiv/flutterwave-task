@@ -78,6 +78,7 @@ export default class FeeService {
       $or: [
         { fee_entity: requestObj.PaymentEntity.Type },
         { fee_entity_property: requestObj.PaymentEntity.Brand },
+        { fee_entity_property: requestObj.PaymentEntity.Issuer },
       ],
     });
 
