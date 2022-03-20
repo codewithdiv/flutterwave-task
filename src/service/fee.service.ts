@@ -1,6 +1,7 @@
 import { log } from 'console';
 import { writeFile } from 'fs/promises';
 import Fee from '../model/lnpy';
+import { RequestObj, ComputedTransaction, T, Fees } from '../index';
 
 export default class FeeService {
   static async parseFSC(reqestObj: RequestObj): Promise<void> {

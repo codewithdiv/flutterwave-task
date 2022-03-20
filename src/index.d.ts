@@ -1,4 +1,4 @@
-interface RequestObj {
+export interface RequestObj {
   fee_id: string;
   fee_currnecy: string;
   fee_locale: string;
@@ -7,7 +7,7 @@ interface RequestObj {
   fee_type: string;
   fee_value: string;
 }
-interface Fees {
+export interface Fees {
   fee_id: string;
   fee_currency: string;
   fee_locale: string;
@@ -18,7 +18,7 @@ interface Fees {
   _id: string;
 }
 
-interface ComputedTransaction {
+export interface ComputedTransaction {
   ID: number;
   Amount: number;
   Currency: string;
@@ -40,7 +40,7 @@ interface ComputedTransaction {
   };
 }
 
-interface T {
+export interface T {
   id: string;
   appliedFeeValue: number;
   chargeAmount: number;
