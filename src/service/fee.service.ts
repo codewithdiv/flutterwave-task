@@ -54,11 +54,12 @@ interface T {
 
 export default class FeeService {
   static async parseFSC(reqestObj: RequestObj): Promise<void> {
+    /** {FEE-ID} {FEE-CURRENCY} {FEE-LOCALE} {FEE-ENTITY}({ENTITY-PROPERTY}) : APPLY {FEE-TYPE} {FEE-VALUE} */
     const _feeConfigurationSpec: string = `${reqestObj.fee_id} ${reqestObj.fee_currnecy} ${reqestObj.fee_locale} ${reqestObj.fee_entity}(${reqestObj.fee_entity_property}) : APPLY ${reqestObj.fee_type} ${reqestObj.fee_value}`;
     const jsonFormat = { FeeConfigurationSpec: _feeConfigurationSpec };
     await writeFile('fcs.json', JSON.stringify(jsonFormat, null, 4));
 
-    const fee = await Fee.build({
+    const fee = Fee.build({
       fee_id: reqestObj.fee_id,
       fee_currency: reqestObj.fee_currnecy,
       fee_locale: reqestObj.fee_locale,
@@ -74,6 +75,7 @@ export default class FeeService {
     requestObj: ComputedTransaction
   ): Promise<T> {
     let fee: Fees = null;
+
     /** Find a FeeConfigurationSpec (FCS) by the
      * fee_entity => payementEntity.type from the user request
      * OR
@@ -81,12 +83,21 @@ export default class FeeService {
      * OR
      * fee_entity_property => requestObj.PaymentEntity.brand
      */
+
     fee = await Fee.findOne({
-      $or: [
-        { fee_entity: requestObj.PaymentEntity.Type || ' ' },
-        { fee_entity_property: requestObj.PaymentEntity.Brand || ' ' },
-        { fee_entity_property: requestObj.PaymentEntity.Issuer || ' ' },
-      ],
+      fee_entity: requestObj.PaymentEntity.Type || '*',
+      fee_entity_property: requestObj.PaymentEntity.Brand
+        ? requestObj.PaymentEntity.Brand || '*'
+        : requestObj.PaymentEntity.Issuer
+        ? requestObj.PaymentEntity.Issuer || '*'
+        : requestObj.PaymentEntity.Issuer ||
+          requestObj.PaymentEntity.Issuer ||
+          '*',
+      // $or: [
+      // {},
+      // { fee_entity_property: requestObj.PaymentEntity.Brand || '*' },
+      // { fee_entity_property: requestObj.PaymentEntity.Issuer || '*' },
+      // ],
     });
 
     log(fee);
